@@ -1,0 +1,12 @@
+{
+  "name": "talk-devday-alexa-twitter",
+  "description": "",
+  "version": "0.1.0",
+  "dependencies": {
+    "alexa-sdk": "^1.0.25",
+    "aws-sdk": "^2.243.1",
+    "deep-object-js": "^1.0.5",
+    "serverless-alexa-skills": "0.0.6"
+  },
+  "devDependencies": {}
+}

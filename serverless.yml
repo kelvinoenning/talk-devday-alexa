@@ -1,0 +1,91 @@
+service: talk-devday-alexa-twitter
+
+package:
+  exclude:
+    - OLD/**
+    - .idea/**
+    - .vscode-root/Cache/data_0
+    - .vscode/**
+    - node_modules/aws-sdk/**
+    - node_modules/base64-js/**
+    - node_modules/buffer/**
+    - node_modules/lodash/**
+    - node_modules/crypto-browserify/**
+    - node_modules/ieee754/**
+    - node_modules/isarray/**
+    - node_modules/jmespath/**
+    - node_modules/punycode/**
+    - node_modules/querystring/**
+    - node_modules/sax/**
+    - node_modules/url/**
+    - node_modules/uiid/**
+    - node_modules/xml2js/**
+    - node_modules/xmlbuilder/**
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  environment:
+    TWITTER_CONSUMER_KEY: ${env:TWITTER_CONSUMER_KEY}
+    TWITTER_CONSUMER_SECRET: ${env:TWITTER_CONSUMER_SECRET}
+    TWITTER_TOKEN_KEY: ${env:TWITTER_TOKEN_KEY}
+    TWITTER_TOKEN_SECRET: ${env:TWITTER_TOKEN_SECRET}
+    API_KEY: ${env:API_KEY}
+
+functions:
+  handler:
+    handler: src/handler.run
+    memorySize: 128
+    events:
+      - alexaSkill: ${env:ALEXA_SKILL_ID}
+
+custom:
+  alexa:
+    vendorId: ${env:AMAZON_VENDOR_ID}
+    clientId: ${env:AMAZON_CLIENT_ID}
+    clientSecret: ${env:AMAZON_CLIENT_SECRET} 
+    skills:
+      - id: ${env:ALEXA_SKILL_ID}
+        manifest:
+          publishingInformation:
+            locales:
+              en-US:
+                name: system
+          apis:
+            custom:
+              endpoint:
+                uri: >-
+                  arn:aws:lambda:us-east-1:854324364467:function:talk-devday-alexa-twitter-dev-handler
+              interfaces: []
+          manifestVersion: '1.0'
+        models:
+          en-US:
+            interactionModel:
+              languageModel:
+                invocationName: system
+                intents:
+                  - name: AskDrawLots
+                    samples:
+                      - draw lots
+                      - to draw lots
+                  - name: Repeat
+                    samples:
+                      - 'repeat {myText}'
+                    slots:
+                    - name: myText
+                      type: AMAZON.SearchQuery
+                  - name: AMAZON.CancelIntent
+                    samples: []
+                  - name: AMAZON.HelpIntent
+                    samples: []
+                  - name: AMAZON.StopIntent
+                    samples: []
+                  - name: AMAZON.FallbackIntent
+                    samples: []
+                  - name: AMAZON.YesIntent
+                    samples: []
+                  - name: AMAZON.NoIntent
+                    samples: []
+
+plugins:
+  - serverless-alexa-skills
